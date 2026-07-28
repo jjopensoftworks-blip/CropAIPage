@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090e0c">
+<title>Privacy Policy — CropAI</title>
+<meta name="description" content="Privacy Policy for CropAI — Farm Field Scanner: what data is collected, why, and who it's shared with.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><span class="leaf">🌱</span>Crop<span class="accent">AI</span></a>
+    <div class="nav-links">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="privacy-policy.html" class="active">Privacy</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+    <a href="index.html#get-app" class="nav-cta">Get the app</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <span class="eyebrow">🔒 Your data</span>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Last updated: July 28, 2026 · App package ID: <code>com.cropai.tier</code></p>
+  </div>
+</header>
+
+<section style="padding-top: 0;">
+  <div class="container" style="max-width: 780px;">
+
+    <div class="callout">
+      <strong>Summary:</strong> CropAI is offline-first — everything you scan is stored on your
+      device first. Creating an account (phone number + PIN) is optional and only needed for
+      cloud backup/restore across devices. We don't display ads, sell your data, or share it
+      with advertisers or data brokers.
+    </div>
+
+    <div class="doc-section">
+      <h2>1. Camera</h2>
+      <p>CropAI requests camera access to show a live video preview on screen while you scan a
+        field. <strong>The camera feed is never recorded, captured as an image, saved, or
+        transmitted anywhere.</strong> It exists only as a live on-screen preview while the app
+        is open.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>2. Location (GPS)</h2>
+      <p>CropAI requests your device's GPS location to:</p>
+      <ul>
+        <li>Query regional soil, weather, and solar data for your coordinates from third-party public data APIs (see the table below).</li>
+        <li>Tag any scan you choose to save with the coordinates it was taken at.</li>
+        <li>Center the optional offline field map.</li>
+      </ul>
+      <p>You can also enter coordinates manually instead of using GPS. Coordinates are stored
+        locally with each saved scan, and if you're logged in, also backed up to our database so
+        you can restore your scans on a different device.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>3. Account, Phone Number &amp; PIN (Optional)</h2>
+      <p>You do not need an account to use CropAI. Creating one is only needed if you want your
+        scans backed up to the cloud and restorable on a new device. If you create one:</p>
+      <ul>
+        <li>Your phone number (with country code) is stored to identify your account.</li>
+        <li>Your 4-digit PIN is never stored in plain text — only a one-way SHA-256 hash of it is stored. We cannot look up or recover your actual PIN.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>4. Field Scan Data</h2>
+      <p>Each scan you save (coordinates, soil profile, weather data, and the crop recommendation
+        shown) is stored locally on your device. If you're logged in, it's also stored in our
+        database so it can be restored if you log in again elsewhere.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>5. Device &amp; Usage Information</h2>
+      <p>To help diagnose problems and understand basic app usage, CropAI records limited
+        technical information — browser/device type, screen size, approximate device memory and
+        CPU core count, language, and timezone — captured once per session or login, not on
+        every action. It also logs a small number of usage events (e.g. "scan saved," "logged
+        in," error events like a denied camera permission) with a timestamp. This isn't used to
+        identify you beyond your account, if you have one.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>6. Who We Share Data With</h2>
+      <p>CropAI sends data to the following third-party services, and no one else:</p>
+      <table>
+        <tr><th>Service</th><th>What it receives</th><th>Why</th></tr>
+        <tr><td>Supabase (database hosting)</td><td>Account info, saved scans, device/usage data described above</td><td>Cloud backup and app diagnostics</td></tr>
+        <tr><td>ISRIC SoilGrids</td><td>Latitude/longitude</td><td>Regional soil data (pH, texture, carbon)</td></tr>
+        <tr><td>Open-Meteo</td><td>Latitude/longitude</td><td>Weather forecast and soil moisture data</td></tr>
+        <tr><td>NASA POWER</td><td>Latitude/longitude</td><td>Solar irradiance data</td></tr>
+        <tr><td>OpenStreetMap tile servers</td><td>Latitude/longitude (only if you open the field map)</td><td>Displaying the offline map view</td></tr>
+        <tr><td>Google Fonts</td><td>Standard font-request data (no scan or account data)</td><td>Loading the app's typography</td></tr>
+      </table>
+      <p><strong>We do not sell your data, and we do not share it with advertisers.</strong> All network requests are made over encrypted HTTPS.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>7. Agricultural Advisory Disclaimer</h2>
+      <div class="callout warn">
+        Crop suitability scores and soil/weather data are automated estimates from regional
+        datasets (SoilGrids, Open-Meteo, NASA POWER), not a certified soil test or field
+        inspection. No responsibility or liability is accepted for decisions made using this
+        data. See our full <a href="disclaimer.html">Disclaimer</a> before making planting,
+        financial, loan, or subsidy decisions.
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <h2>8. Your Choices</h2>
+      <ul>
+        <li>Use CropAI entirely offline/locally without ever creating an account.</li>
+        <li>Log out at any time — your cloud-backed scans remain available if you log back in.</li>
+        <li>Clear local data at any time via your browser/device storage settings.</li>
+        <li>Request full deletion of your account and associated cloud data by emailing us below.</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h2>9. Children's Privacy</h2>
+      <p>CropAI does not target or knowingly collect data from children under 13.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>10. Changes to This Policy</h2>
+      <p>If this policy changes, we'll update the "Last updated" date above.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>11. Contact</h2>
+      <p>
+        <strong>Developer:</strong> jjopensoftworks<br>
+        <strong>Contact Email:</strong> <a href="mailto:jjopensoftworks@gmail.com">jjopensoftworks@gmail.com</a>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="brand"><span class="leaf">🌱</span>Crop<span class="accent">AI</span></div>
+        <p class="footer-meta">Farm Field Scanner.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#features">Features</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="mailto:jjopensoftworks@gmail.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
