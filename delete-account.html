@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090e0c">
+<title>Account & Data Deletion Request — CropAI</title>
+<meta name="description" content="Request deletion of your CropAI account, phone number, saved field scans, and associated cloud data.">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<style>
+  .deletion-box {
+    background: rgba(255, 71, 87, 0.08);
+    border: 1px solid rgba(255, 71, 87, 0.3);
+    border-left: 4px solid #ff4757;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin: 2rem 0;
+  }
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-main);
+  }
+  .form-control {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 1rem;
+  }
+  .btn-danger {
+    background: #ff4757;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.85rem 1.75rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+  .btn-danger:hover {
+    background: #ff6b81;
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="index.html" class="brand"><span class="leaf">🌱</span>Crop<span class="accent">AI</span></a>
+    <div class="nav-links">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#how-it-works">How it works</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="delete-account.html" class="active">Account Deletion</a>
+      <a href="disclaimer.html">Disclaimer</a>
+    </div>
+    <a href="index.html#get-app" class="nav-cta">Get the app</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <span class="eyebrow">🗑️ User Data Safety</span>
+    <h1>Account &amp; Data Deletion Request</h1>
+    <p class="meta">CropAI — Farm Field Scanner · App Package: <code>com.cropai.tier</code> · Developer: jjopensoftworks</p>
+  </div>
+</header>
+
+<section style="padding-top: 0;">
+  <div class="container" style="max-width: 780px;">
+
+    <div class="callout">
+      <strong>Google Play Data Safety Notice:</strong> In accordance with Google Play's User Data policy, CropAI provides users with the right to request deletion of their account and all associated cloud data without requiring app re-installation or in-app logins.
+    </div>
+
+    <div class="doc-section">
+      <h2>1. Scope of Data Deletion</h2>
+      <p>When an account deletion request is processed, the following data associated with your registered phone number will be <strong>permanently purged</strong> from our Supabase cloud database:</p>
+      <ul>
+        <li><strong>Account Record:</strong> Your phone number and SHA-256 hashed PIN.</li>
+        <li><strong>Saved Field Scans:</strong> All historical GPS coordinates, soil profiles (pH, clay, sand, organic carbon), 7-day weather forecasts, solar radiation values, and crop suitability recommendations.</li>
+        <li><strong>Telemetry &amp; Usage Logs:</strong> Any diagnostic log entries (device specs, login events, permission events) linked to your account.</li>
+      </ul>
+      <p><em>Note: Data stored locally on your device's browser/app storage can be cleared at any time by tapping "Log Out" in the app or clearing local browser storage.</em></p>
+    </div>
+
+    <div class="doc-section">
+      <h2>2. Data Retention Policy</h2>
+      <p>Once deleted, account data cannot be recovered. We do not retain backup copies of deleted user accounts beyond a 14-day administrative deletion queue window. No data is shared with third parties or retained for advertising.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>3. How to Request Account Deletion</h2>
+      <p>You can submit an account deletion request using either method below:</p>
+
+      <div class="deletion-box">
+        <h3 style="color: #ff4757; margin-bottom: 0.75rem;">Method A: Direct Email Request (Recommended)</h3>
+        <p style="margin-bottom: 1rem;">Click the button below to generate an account deletion request email from your device:</p>
+        
+        <form id="deletion-form" onsubmit="handleDeletionSubmit(event)">
+          <div class="form-group">
+            <label for="phone-input">Registered Phone Number (with Country Code):</label>
+            <input type="text" id="phone-input" class="form-control" placeholder="e.g. +91 9876543210 or +1 5550192" required>
+          </div>
+          <button type="submit" class="btn-danger">✉️ Send Account Deletion Request</button>
+        </form>
+      </div>
+
+      <div class="doc-section">
+        <h3>Method B: Manual Email Request</h3>
+        <p>If the button above does not launch your email client, send an email directly to:</p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:jjopensoftworks@gmail.com?subject=CropAI%20Account%20and%20Data%20Deletion%20Request">jjopensoftworks@gmail.com</a><br>
+          <strong>Subject:</strong> <code>CropAI Account and Data Deletion Request</code><br>
+          <strong>Content:</strong> Include the registered phone number associated with your account.
+        </p>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <h2>4. Processing Timeframe</h2>
+      <p>Account deletion requests are processed within <strong>7 to 14 business days</strong>. You will receive a confirmation email once your account data has been completely erased from our database.</p>
+    </div>
+
+    <div class="doc-section">
+      <h2>5. Questions &amp; Support</h2>
+      <p>If you have any questions regarding your data privacy or account deletion, please contact the developer:</p>
+      <p>
+        <strong>Developer:</strong> jjopensoftworks<br>
+        <strong>Email:</strong> <a href="mailto:jjopensoftworks@gmail.com">jjopensoftworks@gmail.com</a><br>
+        <strong>Privacy Policy:</strong> <a href="privacy-policy.html">View Privacy Policy</a>
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="brand"><span class="leaf">🌱</span>Crop<span class="accent">AI</span></div>
+        <p class="footer-meta">Farm Field Scanner.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html#features">Features</a>
+        <a href="changelog.html">Changelog</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="delete-account.html">Account Deletion</a>
+        <a href="disclaimer.html">Disclaimer</a>
+        <a href="mailto:jjopensoftworks@gmail.com">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function handleDeletionSubmit(e) {
+  e.preventDefault();
+  const phone = document.getElementById('phone-input').value.trim();
+  if (!phone) return;
+  
+  const subject = encodeURIComponent("CropAI Account and Data Deletion Request");
+  const body = encodeURIComponent("Hello CropAI Support,\n\nPlease delete my CropAI account and all associated cloud data.\n\nRegistered Phone Number: " + phone + "\nPackage ID: com.cropai.tier\n\nThank you.");
+  
+  window.location.href = "mailto:jjopensoftworks@gmail.com?subject=" + subject + "&body=" + body;
+}
+</script>
+
+</body>
+</html>
