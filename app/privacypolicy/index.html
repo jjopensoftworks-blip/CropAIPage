@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — CropAI</title>
+  <meta name="description" content="Privacy Policy for CropAI — Farm Field Scanner: what data is collected, why, and who it's shared with.">
+  <link rel="icon" type="image/svg+xml" href="../assets/logo.svg">
+  <style>
+    :root {
+      --bg-dark: #090E0C;
+      --card-bg: #111A16;
+      --accent-green: #2ed573;
+      --text-main: #E8ECE9;
+      --text-muted: #8F9D96;
+      --border-color: #1F2D27;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.7;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2.5rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .header {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h1 { font-size: 2.2rem; color: var(--accent-green); margin-bottom: 0.5rem; }
+    .meta { color: var(--text-muted); font-size: 0.9rem; }
+
+    h2 {
+      font-size: 1.4rem;
+      color: var(--accent-green);
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed var(--border-color);
+      padding-bottom: 0.3rem;
+    }
+
+    p, li { color: #C5D1CB; margin-bottom: 1rem; }
+    ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+    li { margin-bottom: 0.5rem; }
+
+    .highlight-box {
+      background: rgba(46, 213, 115, 0.08);
+      border-left: 4px solid var(--accent-green);
+      padding: 1.2rem;
+      border-radius: 6px;
+      margin: 1.5rem 0;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+    th, td { text-align: left; padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border-color); vertical-align: top; color: #C5D1CB; }
+    th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 0.75rem; }
+
+    a { color: var(--accent-green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .footer-nav {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn {
+      background: var(--accent-green);
+      color: #050B08;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>Privacy Policy</h1>
+      <p class="meta">Last updated: July 28, 2026 | App Package ID: <code>com.cropai.tier</code></p>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Summary:</strong> CropAI is offline-first — everything you scan is stored on your
+      device first. Creating an account (phone number + PIN) is <strong>optional</strong> and only
+      needed for cloud backup/restore across devices. We do not display ads, do not sell your data,
+      and do not share it with data brokers or advertisers.
+    </div>
+
+    <h2>1. Camera</h2>
+    <p>
+      CropAI requests camera access to show a live video preview on screen while you scan a field.
+      <strong>The camera feed is never recorded, captured as an image, saved, or transmitted
+      anywhere.</strong> It exists only as a live on-screen preview while the app is open.
+    </p>
+
+    <h2>2. Location (GPS)</h2>
+    <p>CropAI requests your device's GPS location to:</p>
+    <ul>
+      <li>Query regional soil, weather, and solar data for your coordinates from third-party public data APIs (listed in the table below).</li>
+      <li>Tag any scan you choose to save with the coordinates it was taken at.</li>
+      <li>Center the optional offline field map.</li>
+    </ul>
+    <p>
+      You can also enter coordinates manually instead of using GPS. Coordinates are stored locally
+      with each saved scan, and if you're logged in, also backed up to our database so you can
+      restore your scans on a different device.
+    </p>
+
+    <h2>3. Account, Phone Number & PIN (Optional)</h2>
+    <p>
+      You do <strong>not</strong> need an account to use CropAI. Creating one is only needed if you
+      want your scans backed up to the cloud and restorable on a new device. If you create one:
+    </p>
+    <ul>
+      <li>Your phone number (with country code) is stored to identify your account.</li>
+      <li>Your 4-digit PIN is never stored in plain text — only a one-way SHA-256 hash of it is stored. We cannot look up or recover your actual PIN.</li>
+    </ul>
+
+    <h2>4. Field Scan Data</h2>
+    <p>
+      Each scan you save (coordinates, soil profile, weather data, and the crop recommendation
+      shown) is stored locally on your device. If you're logged in, it's also stored in our
+      database so it can be restored if you log in again elsewhere.
+    </p>
+
+    <h2>5. Device & Usage Information</h2>
+    <p>
+      To help diagnose problems and understand basic app usage, CropAI records limited technical
+      information — browser/device type, screen size, approximate device memory and CPU core
+      count, language, and timezone — captured once per session or login, not on every action. It
+      also logs a small number of usage events (e.g. "scan saved," "logged in," error events like a
+      denied camera permission) with a timestamp. This isn't used to identify you beyond your
+      account, if you have one.
+    </p>
+
+    <h2>6. Who We Share Data With</h2>
+    <p>CropAI sends data to the following third-party services, and no one else:</p>
+    <table>
+      <tr><th>Service</th><th>What it receives</th><th>Why</th></tr>
+      <tr><td>Supabase (database hosting)</td><td>Account info, saved scans, device/usage data described above</td><td>Cloud backup and app diagnostics</td></tr>
+      <tr><td>ISRIC SoilGrids</td><td>Latitude/longitude</td><td>Regional soil data (pH, texture, carbon)</td></tr>
+      <tr><td>Open-Meteo</td><td>Latitude/longitude</td><td>Weather forecast and soil moisture data</td></tr>
+      <tr><td>NASA POWER</td><td>Latitude/longitude</td><td>Solar irradiance data</td></tr>
+      <tr><td>OpenStreetMap tile servers</td><td>Latitude/longitude (only if you open the field map)</td><td>Displaying the offline map view</td></tr>
+      <tr><td>Google Fonts</td><td>Standard font-request data (no scan or account data)</td><td>Loading the app's typography</td></tr>
+    </table>
+    <p><strong>We do not sell your data, and we do not share it with advertisers.</strong> All network requests are made over encrypted HTTPS.</p>
+
+    <h2>7. Agricultural Advisory Disclaimer</h2>
+    <div class="highlight-box">
+      <strong>Important:</strong> Crop suitability scores and soil/weather data are automated
+      estimates from regional datasets (SoilGrids, Open-Meteo, NASA POWER), not a certified soil
+      test or field inspection. No responsibility or liability is accepted for decisions made using
+      this data. Verify with a qualified agronomist or your local agricultural extension office
+      before making planting, financial, loan, or subsidy decisions.
+    </div>
+
+    <h2>8. Your Choices</h2>
+    <ul>
+      <li>Use CropAI entirely offline/locally without ever creating an account.</li>
+      <li>Log out at any time from the account menu — your cloud-backed scans remain available if you log back in.</li>
+      <li>Clear local data at any time by clearing site/app storage in your browser or device settings.</li>
+      <li>Request full deletion of your account and associated cloud data on our <a href="delete-account.html">Account &amp; Data Deletion Page</a>.</li>
+    </ul>
+
+    <h2>9. Children's Privacy</h2>
+    <p>CropAI does not target or knowingly collect data from children under 13.</p>
+
+    <h2>10. Changes to This Policy</h2>
+    <p>If this policy changes, we'll update the "Last updated" date above.</p>
+
+    <h2>11. Contact</h2>
+    <p>
+      <strong>Developer:</strong> jjopensoftworks<br>
+      <strong>Contact Email:</strong> <a href="mailto:jjopensoftworks@gmail.com">jjopensoftworks@gmail.com</a><br>
+      <strong>App site:</strong> <a href="https://jjopensoftworks-blip.github.io/CropAIPage/">https://jjopensoftworks-blip.github.io/CropAIPage/</a>
+    </p>
+
+    <h2>12. Account &amp; Data Deletion Requirement</h2>
+    <p>
+      Per Google Play Data Safety requirements, you may request permanent deletion of your phone number, PIN hash, field scans, and telemetry logs at any time. Visit our dedicated <a href="delete-account.html"><strong>Account &amp; Data Deletion Page</strong></a> to submit a deletion request without needing to open or log in to the app.
+    </p>
+
+    <div class="footer-nav">
+      <a href="../index.html" class="btn">← Back to CropAI</a>
+      <a href="delete-account.html" class="btn" style="background:#ff4757; color:#fff;">🗑️ Account Deletion Page</a>
+      <span class="meta">© 2026 jjopensoftworks. All Rights Reserved.</span>
+    </div>
+  </div>
+
+</body>
+</html>
