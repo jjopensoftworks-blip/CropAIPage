@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.cropai.tier",
+      "sha256_cert_fingerprints": [
+        "F4:17:CF:24:82:DD:CC:B9:6B:99:3D:4D:55:CE:CC:70:D6:14:D5:EC:D8:47:E1:E4:C2:96:DC:A2:DE:24:D6:62"
+      ]
+    }
+  }
+]

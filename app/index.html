@@ -1,0 +1,391 @@
+<!--
+  Copyright (c) 2026 CropAI / jjopensoftworks
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at https://mozilla.org/MPL/2.0/.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://unpkg.com https://*.tile.openstreetmap.org https://lh3.googleusercontent.com; connect-src 'self' https://rest.isric.org https://api.open-meteo.com https://power.larc.nasa.gov https://tpwakcotnzlmeidowwqf.supabase.co https://unpkg.com;">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0d1512">
+  <meta name="description"
+    content="Zero-cost real-time farm scanner with soil, weather, and crop-suitability overlays keyed to GPS location.">
+  <meta name="keywords"
+    content="AgriTech, Farm Scanner, Soil Quality, Crop Recommendation, Weather Forecast, Precision Agriculture">
+  <meta name="author" content="jjopensoftworks <jjopensoftworks@gmail.com>">
+  <meta name="robots" content="index, follow">
+
+  <!-- OpenGraph / Social Marketing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CropAI — Real-Time Farm Field Scanner">
+  <meta property="og:description"
+    content="Instant soil, weather & crop-fit HUD floating overlay powered by free GPS REST APIs.">
+  <meta property="og:image" content="assets/logo_neon.png">
+  <meta property="og:url" content="https://cropai.app">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CropAI — Farm Field Scanner">
+  <meta name="twitter:description"
+    content="Zero-cost agricultural field scanning PWA with offline-first local storage.">
+  <meta name="twitter:image" content="assets/logo_neon.png">
+
+  <title>CropAI — Farm Field Scanner</title>
+
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="apple-touch-icon" href="assets/logo_neon.png">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="styles.css?v=1.4.4">
+  <link rel="stylesheet" href="../styles.css?v=1.4.4">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- HARD BLOCK PERMISSION OVERLAY (Blocks entire UI until Camera & GPS granted) -->
+    <div id="permission-block-screen" class="permission-block-screen">
+      <div class="permission-card">
+        <div class="perm-logo-hero">
+          <div class="perm-logo-glow"></div>
+          <img src="assets/logo_neon.png" alt="CropAI Logo" class="perm-brand-logo">
+          <span class="perm-status-badge">🌱 CropAI Field Scanner</span>
+        </div>
+        <h2 data-i18n="permsRequired">Permissions Required</h2>
+        <p class="perm-desc" data-i18n="permsDesc">
+          CropAI needs access to your <strong>Camera</strong> (for live field scanning) and <strong>GPS
+            Location</strong> (to query regional soil, weather & solar data).
+        </p>
+        <div class="permission-checklist">
+          <div class="check-item">
+            <span class="status-icon" id="status-cam-icon">📷</span>
+            <span data-i18n="cameraStreamAccess">Camera Stream Access</span>
+          </div>
+          <div class="check-item">
+            <span class="status-icon" id="status-gps-icon">📍</span>
+            <span data-i18n="gpsGeolocationAccess">GPS Geolocation Access</span>
+          </div>
+        </div>
+        <div id="perm-error-msg" class="perm-error-msg hidden" data-i18n="permErrorMsg">
+          Permission was denied. Please allow Camera & Location in your browser settings to proceed.
+        </div>
+        <button id="btn-grant-permissions" class="btn-grant-permissions">
+          <span data-i18n="grantPermissions">Grant Camera & GPS Access</span>
+        </button>
+      </div>    <!-- MAIN APP CONTENT (Hidden until Hard-Block Permissions are Granted) -->
+    <div id="main-app-content" class="main-app-content hidden">
+      <!-- Camera Viewport Container (kept alive for app.js) -->
+      <div class="camera-viewport" style="position: absolute; top:0; left:0; width:100%; height:100%; z-index:0; opacity: 0.3;">
+        <video id="camera-feed" autoplay playsinline muted style="width:100%; height:100%; object-fit:cover;"></video>
+        <canvas id="camera-canvas" class="hidden"></canvas>
+      </div>
+      <!-- Bioluminescent HUD -->
+      <div class="hud-layout" style="position: relative; z-index: 10; background: rgba(13, 21, 21, 0.85); backdrop-filter: blur(12px);">
+        <header class="hud-header">
+          <img src="assets/logo_neon.png" alt="CropAI Logo" class="hud-logo">
+          <h1 data-i18n="fieldScanner">Scan Results</h1>
+          
+          <div style="margin-left: auto; display: flex; gap: 8px;">
+             <select id="lang-selector" class="bio-badge" style="border:none; cursor:pointer;" title="Change Language / भाषा चुनें">
+                <option value="en">EN</option>
+                <option value="hi">HI</option>
+                <option value="pa">PA</option>
+             </select>
+             <!-- Removed Theme Selector since we are strictly Bioluminescent Theme now -->
+             <button id="btn-refresh-location" class="bio-badge" style="border:none; cursor:pointer;" title="Refresh GPS">
+                <span class="material-symbols-outlined" style="font-size: 18px;">refresh</span>
+             </button>
+             <button id="btn-account" class="bio-badge" style="border:none; cursor:pointer;">
+                <span id="account-label" data-i18n="login">Login</span>
+             </button>
+             <button id="btn-history" class="bio-badge" style="border:none; cursor:pointer;">
+                History
+             </button>
+          </div>
+        </header>
+        
+        <main class="hud-scrollable">
+          
+          <!-- Coordinates & Controls -->
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+             <div style="display:flex; align-items:center; gap:8px; padding: 6px 12px; background: var(--surface-container); border-radius: 99px; border: 1px solid var(--outline-variant);">
+                <span class="material-symbols-outlined" style="color: var(--primary); font-size:16px;">my_location</span>
+                <span id="gps-coords" style="font-size: 13px; font-weight:600; letter-spacing: 0.05em;">Locating...</span>
+             </div>
+             
+             <button id="btn-view-map" class="bio-badge" style="border:none; cursor:pointer;">
+                <span data-i18n="btnViewMapText">🗺️ Map</span>
+             </button>
+          </div>
+
+          <!-- AI Recommendation -->
+          <div class="bio-card-highlight">
+             <div class="bio-icon-box">
+                <span class="material-symbols-outlined">psychiatry</span>
+             </div>
+             <div>
+                <span class="label" data-i18n="cropRecommendationTag">Optimal Recommendation</span>
+                <h2 id="crop-recommendation" data-i18n="cropRecCalculating">Calculating...</h2>
+                <p id="crop-reasoning" data-i18n="cropReasoningSubtitle">Based on regional soil & moisture</p>
+             </div>
+          </div>
+
+          <!-- Soil Profile -->
+          <div class="bio-card">
+             <div class="bio-card-title">
+                <span class="material-symbols-outlined">grass</span>
+                <h3 data-i18n="soilProfile">Soil Profile</h3>
+                <span id="soil-type" class="subtitle" data-i18n="soilTypeAnalyzing">Analyzing...</span>
+             </div>
+             <div class="bio-grid-2x2">
+                <div class="bio-data-box">
+                   <span class="label" data-i18n="lblPh">pH Level</span>
+                   <span id="soil-ph" class="value">--</span>
+                </div>
+                <div class="bio-data-box">
+                   <span class="label" data-i18n="lblCarbon">Carbon</span>
+                   <div>
+                     <span id="soil-soc" class="value">--</span> <span class="unit">g/kg</span>
+                   </div>
+                </div>
+                <div class="bio-data-box">
+                   <span class="label" data-i18n="lblClay">Clay</span>
+                   <span id="soil-clay" class="value">--%</span>
+                </div>
+                <div class="bio-data-box">
+                   <span class="label" data-i18n="lblSand">Sand</span>
+                   <span id="soil-sand" class="value">--%</span>
+                </div>
+             </div>
+          </div>
+
+          <!-- Weather Profile -->
+          <div class="bio-card">
+             <div class="bio-card-title">
+                <span class="material-symbols-outlined">thermostat</span>
+                <h3 data-i18n="weatherForecast">7-Day Outlook</h3>
+                <span id="weather-condition" class="bio-badge" style="margin-left:auto;">--</span>
+             </div>
+             
+             <div class="bio-weather-temp">
+                <h2 id="weather-temp">--°C</h2>
+                <span style="font-size:14px; font-weight:500; color: var(--on-surface-variant);">Avg Temp</span>
+             </div>
+             
+             <div>
+                <div class="bio-weather-row">
+                   <span class="label" data-i18n="lblRain">Rainfall</span>
+                   <span id="weather-rain" class="val">-- mm</span>
+                </div>
+                <div class="bio-progress-bg">
+                   <div id="weather-rain-bar" class="bio-progress-fill" style="width: 30%;"></div>
+                </div>
+                
+                <div class="bio-weather-row">
+                   <span class="label" data-i18n="lblSun">Sunlight</span>
+                   <span id="weather-sun" class="val">-- hrs</span>
+                </div>
+                <div class="bio-progress-bg">
+                   <div id="weather-sun-bar" class="bio-progress-fill yellow" style="width: 70%;"></div>
+                </div>
+
+                <div class="bio-weather-row" style="margin-top:8px;">
+                   <span class="label" data-i18n="lblSolar">Solar Rad</span>
+                   <span id="nasa-solar" class="val">-- MJ/m²</span>
+                </div>
+             </div>
+          </div>
+          
+          <button id="btn-save-scan" style="width:100%; height:56px; background:var(--primary); color:var(--on-primary); border-radius:12px; font-weight:700; font-size:16px; border:none; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:8px; cursor:pointer;">
+            <span class="material-symbols-outlined">bookmark</span> <span data-i18n="saveScan">Save to My Fields</span>
+          </button>
+          
+          <button id="btn-manual-coords" style="width:100%; margin-top:8px; padding: 12px; background:transparent; border:none; color: var(--on-surface-variant); font-size:14px; cursor:pointer;">
+            <span data-i18n="btnManualCoordsText">📍 Custom Lat/Lon</span>
+          </button>
+        </main>
+      </div>
+
+      <!-- Field Map Modal -->
+      <div id="map-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3 data-i18n="mapModalTitle">🗺️ Offline Field Location & Area Map</h3>
+            <button id="btn-close-map" class="icon-btn-close">&times;</button>
+          </div>
+
+          <!-- FIELD AREA BOUNDARY CONTROL BAR -->
+          <div
+            style="background: rgba(46, 213, 115, 0.08); border: 1px solid rgba(46, 213, 115, 0.25); border-radius: 10px; padding: 10px; margin-top: 10px; text-align: center;">
+            <div style="font-size: 14px; font-weight: bold; color: #2ed573;" id="field-area-display"
+              data-i18n="fieldAreaDefault">
+              📐 Field Area: 0.00 Acres (0.00 Hectares)
+            </div>
+            <div style="font-size: 11px; color: #8F9D96; margin-top: 4px;" data-i18n="fieldAreaTapHint">
+              Tap 3+ boundary points on the map to draw your field polygon & calculate area
+            </div>
+            <div style="display: flex; gap: 8px; justify-content: center; margin-top: 8px;">
+              <button type="button" id="btn-clear-polygon"
+                style="background: #ff4757; color: #fff; border: none; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;"
+                data-i18n="btnClearBoundary">🗑️ Clear Boundary</button>
+              <button type="button" id="btn-recenter-map"
+                style="background: #334155; color: #e2e8f0; border: none; padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer;"
+                data-i18n="btnUseCurrentLocation">📍 Center on GPS</button>
+            </div>
+          </div>
+
+          <div id="field-map-container"
+            style="height:300px;width:100%;border-radius:12px;margin-top:10px;border:1px solid rgba(46,213,115,0.3);cursor:crosshair;">
+          </div>
+          <div style="font-size:11px;color:#8F9D96;margin-top:8px;text-align:center;">
+            <span data-i18n="mapModalFooter">📍 Cached OpenStreetMap Tiles (Available Offline)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scan Saved Notification Toast -->
+      <div id="toast" class="toast hidden">
+        <span class="toast-icon">✅</span>
+        <span id="toast-message">Scan saved locally!</span>
+      </div>
+
+      <!-- History Drawer / Modal -->
+      <div id="history-modal" class="modal-backdrop hidden">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h2 data-i18n="historyModalTitle">Saved Field Scans</h2>
+            <button id="btn-close-history" class="close-btn">&times;</button>
+          </div>
+          <div id="history-list" class="history-list">
+            <div class="empty-state">
+              <p data-i18n="historyEmptyTitle">No saved scans yet.</p>
+              <small data-i18n="historyEmptyDesc">Point camera at field and tap "Save Scan".</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Farmer Phone + PIN Auth Modal (Phase 2) -->
+      <div id="auth-modal" class="modal-backdrop hidden">
+        <div class="modal-card mini">
+          <div class="modal-header">
+            <h3 data-i18n="authModalTitle">Farmer Account & Cloud Backup</h3>
+            <button id="btn-close-auth" class="close-btn">&times;</button>
+          </div>
+          <form id="auth-form" class="modal-body">
+            <p class="modal-subtext" data-i18n="authModalDesc">Enter your phone number & 4-digit PIN to enable cloud
+              backup and restore scans on a new phone.</p>
+            <label>
+              <span data-i18n="lblCountry">Country:</span>
+              <select id="input-country">
+                <option value="+91" data-len="10">🇮🇳 India (+91)</option>
+                <option value="+1" data-len="10">🇺🇸 USA / Canada (+1)</option>
+                <option value="+55" data-len="10-11">🇧🇷 Brazil (+55)</option>
+                <option value="+33" data-len="9">🇫🇷 France (+33)</option>
+                <option value="+34" data-len="9">🇪🇸 Spain (+34)</option>
+                <option value="+92" data-len="10">🇵🇰 Pakistan (+92)</option>
+                <option value="+880" data-len="10">🇧🇩 Bangladesh (+880)</option>
+                <option value="other" data-len="6-15">🌐 Other</option>
+              </select>
+            </label>
+            <label>
+              <span data-i18n="lblPhone">Phone Number:</span>
+              <input type="tel" id="input-phone" placeholder="e.g. 98765 43210" required>
+            </label>
+            <label id="input-country-code-label" class="hidden">
+              <span data-i18n="lblCountryCode">Country Dial Code:</span>
+              <input type="text" id="input-country-code" placeholder="e.g. +971" maxlength="5">
+            </label>
+            <label>
+              <span data-i18n="lblPin">4-Digit PIN:</span>
+              <input type="password" id="input-pin" maxlength="4" pattern="[0-9]{4}" placeholder="****" required>
+            </label>
+            <div id="auth-error-msg" class="perm-error-msg hidden"></div>
+            <button type="submit" id="btn-auth-submit" class="btn-primary full-width"
+              data-i18n="btnAuthSubmitText">Login / Register Backup</button>
+            <p style="font-size:11px;color:#8F9D96;text-align:center;margin-top:10px;">
+              <span data-i18n="privacyAgreement">By continuing you agree to our</span> <a href="../privacypolicy/"
+                target="_blank" style="color:#2ed573;" data-i18n="privacyPolicyLink">Privacy Policy</a> · <a
+                href="../privacypolicy/delete-account.html" target="_blank" style="color:#ff4757;"
+                data-i18n="deleteAccountLink">Delete Account & Data</a>
+            </p>
+          </form>
+
+          <!-- LOGGED-IN ACCOUNT MANAGEMENT VIEW -->
+          <div id="account-logged-in-view" class="modal-body hidden">
+            <div
+              style="background: rgba(46, 213, 115, 0.1); border: 1px solid #2ed573; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 15px;">
+              <div style="font-size: 24px; margin-bottom: 5px;">👤</div>
+              <div style="font-weight: bold; font-size: 16px; color: #e8ece9;" id="logged-in-phone-display">+91
+                0000000000</div>
+              <div style="font-size: 11px; color: #2ed573; margin-top: 4px;">✔ Cloud Backup Active & Verified</div>
+              <div style="font-size: 10px; color: #8F9D96; margin-top: 4px; font-family: monospace;"
+                id="logged-in-farmer-id">ID: --</div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <button type="button" id="btn-account-logout" class="btn-primary full-width"
+                style="background: #334155; color: #e2e8f0;" data-i18n="btnLogOut">Log Out</button>
+              <button type="button" id="btn-account-delete" class="btn-primary full-width"
+                style="background: #ff4757; color: #ffffff; font-weight: bold;" data-i18n="btnDeleteAccountData">🗑️
+                Delete Account & Cloud Data</button>
+            </div>
+
+            <p style="font-size: 11px; color: #8F9D96; text-align: center; margin-top: 15px;">
+              <a href="../privacypolicy/delete-account.html" target="_blank" style="color: #ff4757;"
+                data-i18n="deleteAccountPolicyLink">View Account Deletion Policy & Scope</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom Coordinate Input Modal -->
+      <div id="coords-modal" class="modal-backdrop hidden">
+        <div class="modal-card mini">
+          <div class="modal-header">
+            <h3 data-i18n="coordsModalTitle">Set Custom Coordinates</h3>
+            <button id="btn-close-coords" class="close-btn">&times;</button>
+          </div>
+          <form id="coords-form" class="modal-body">
+            <label>
+              <span data-i18n="lblLatitude">Latitude:</span>
+              <input type="number" id="input-lat" step="any" placeholder="e.g. 20.5937" required>
+            </label>
+            <label>
+              <span data-i18n="lblLongitude">Longitude:</span>
+              <input type="number" id="input-lon" step="any" placeholder="e.g. 78.9629" required>
+            </label>
+            <div class="preset-buttons">
+              <button type="button" class="chip-preset" data-lat="20.5937" data-lon="78.9629"
+                data-i18n="presetIndia">India Central</button>
+              <button type="button" class="chip-preset" data-lat="37.0902" data-lon="-95.7129" data-i18n="presetUS">US
+                Corn Belt</button>
+              <button type="button" class="chip-preset" data-lat="-14.2350" data-lon="-51.9253"
+                data-i18n="presetBrazil">Brazil Soy</button>
+            </div>
+            <button type="submit" class="btn-primary full-width" data-i18n="btnApplyCoords">Apply Coordinates</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

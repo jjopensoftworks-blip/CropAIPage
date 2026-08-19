@@ -1,0 +1,5 @@
+# Private local files and history archives
+local/
+*.local
+.DS_Store
+Thumbs.db
