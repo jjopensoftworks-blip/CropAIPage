@@ -6,12 +6,12 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const CACHE_NAME = 'cropai-v1.4.4';
+const CACHE_NAME = 'cropai-v1.4.6';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
-  './styles.css?v=1.4.4',
+  './styles.css?v=1.4.6',
   './app.min.js',
   './manifest.json',
   './assets/icon.png',
